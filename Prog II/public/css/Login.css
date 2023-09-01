@@ -1,0 +1,89 @@
+
+	.box{
+		padding: 10px;
+		background-color: rgba(0, 0, 0, 0.8);
+		position: relative;
+		justify-content: center;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		display: flex;
+		border-radius: 10px;
+		width: 20%;
+	}
+	legend{
+        border: solid dodgerblue 1px;
+        padding: 10px;
+        text-align: center;
+        background-color:dodgerblue;
+        border-radius: 5px;
+        background: linear-gradient(to right, rgba(233, 0, 0, 0.904),  rgb(24, 208, 0), rgb(255, 247, 0), cyan, rgb(149, 0, 255));
+        background-clip: text;
+        -webkit-background-clip: text;
+        color: transparent;
+        animation: colors 5s ease infinite;
+        background-size: 400% 400%;
+	}
+	@keyframes colors{
+        0%{
+            background-position: 0% 50%;
+        }
+        50%{
+            background-position: 100% 50%;
+        }
+        100%{
+            background-position: 0% 50%;
+        }
+    }
+
+	fieldset{
+		border-color: dodgerblue;
+	}
+
+	body{
+		background-image: linear-gradient(to right, #1E90FF, #6100fd);
+		font-family: Arial, Helvetica, sans-serif;
+		font-size: 14;
+		color: white;
+	}
+
+	.comum{
+		background: none;
+		border: none;
+		border-bottom: 2px solid white;
+		font-size: 15pt;
+		outline: none;
+		letter-spacing: 2px;
+		padding: 10px;
+		width: 100%;
+		color: white;
+	}
+
+	#recover{
+		font-size: 10pt;
+		color:purple;
+		margin-top: 3px;
+		text-decoration: none;
+		position: absolute;
+	}
+
+	#botão{
+		background-image: linear-gradient(to right, dodgerblue, midnightblue);
+		border: none;
+		border-radius: 10px;
+		padding: 15px;
+		text-align: center;
+		justify-content: center;
+		width: 100%;
+		cursor: pointer;
+		margin-top: 10px;
+		color: white;
+	}
+	#botão:hover{
+		background-image: linear-gradient(to right, darkblue, purple);
+	
+	}
+
+
+	
+
