@@ -2,8 +2,9 @@ const express = require('express');
 const bodyParser = require('body-parser')
 const app = express();
 
-// Define a pasta de onde os arquivos est·ticos ser„o servidos
+// Define a pasta de onde os arquivos est√°ticos ser√£o servidos
 app.use(express.static('public'));
+app.use(bodyParser.json());
 
 // Inicia o servidor
 const PORT = process.env.PORT || 3000;
