@@ -1,5 +1,5 @@
 import * as React from 'react';
-import axios from 'axios';
+import axios from "axios";
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 //import Link from '@mui/material/Link';
 //import Grid from '@mui/material/Grid';
@@ -33,7 +33,7 @@ export default function Login(props) {
 	async function enviaLogin(event) {
 		event.preventDefault();
 		try {
-			const response = await axios.post("/login", {
+			const response = await axios.post("http://localhost:3010/login", {
 				email: email,
 				password: passwd,
 			});
@@ -82,16 +82,20 @@ export default function Login(props) {
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
-          <Box component="form" onSubmit={enviaLogin} noValidate sx={{ mt: 1 }}>
+          <Box>
             <TextField
               margin="normal"
               required
               fullWidth
-              id="email"
-              label="Email Address"
+              id="email-input"
+              label="Email"
               name="email"
               autoComplete="email"
               autoFocus
+              value={email}
+              onChange={(event) => {
+                setEmail(event.target.value);
+              }}
             />
             <TextField
               margin="normal"
@@ -100,21 +104,37 @@ export default function Login(props) {
               name="password"
               label="Password"
               type="password"
-              id="password"
+              id="passwd-input"
               autoComplete="current-password"
+              value={passwd}
+              onChange={(event) => {
+                setPasswd(event.target.value);
+              }}
             />
-            <FormControlLabel
+           {/* <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
-            />
+            />*/}
             <Button
-              type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
+              onClick={enviaLogin}
             >
               Sign In
             </Button>
+				<Snackbar
+					open={openMessage}
+					autoHideDuration={6000}
+					onClose={handleCloseMessage}
+				>
+					<Alert
+						severity={messageSeverity}
+						onClose={handleCloseMessage}
+					>
+						{messageText}
+					</Alert>
+				</Snackbar>
           </Box>
         </Box>
       </Container>
