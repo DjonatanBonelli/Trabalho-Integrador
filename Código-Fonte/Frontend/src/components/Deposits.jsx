@@ -17,6 +17,7 @@ export default function Deposits() {
   }, []);
 
   async function getData() {
+
     try {
         const res = await axios.get("http://localhost:3010/vendas-geral");
         setDependencias(res.data);

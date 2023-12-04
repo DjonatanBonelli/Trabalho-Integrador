@@ -11,10 +11,11 @@ CREATE TABLE admin
 
 CREATE TABLE produto
 (
-    id SERIAL,
-    nome VARCHAR NOT NULL,
-    valor FLOAT NOT NULL,
-    CONSTRAINT pk_produto PRIMARY KEY (id),
+    idp SERIAL,
+    nomep VARCHAR NOT NULL,
+    valorp FLOAT NOT NULL,
+    UNIQUE(nomep),
+    CONSTRAINT pk_produto PRIMARY KEY (idp),
 );
 
 -- DROP TABLE clientef;
@@ -22,24 +23,67 @@ CREATE TABLE produto
 CREATE TABLE clientef
 (
     cpf VARCHAR NOT NULL,
-    nome VARCHAR NOT NULL,
-    endereco VARCHAR NOT NULL,
-    telefone INTEGER,
-    CONSTRAINT pk_cliente PRIMARY KEY (cpf),
+    nomecf VARCHAR NOT NULL,
+    enderecocf VARCHAR NOT NULL,
+    telefonecf INTEGER,
+    CONSTRAINT pk_clientef PRIMARY KEY (cpf),
+);
+
+CREATE TABLE clientej
+(
+    cnpjc VARCHAR NOT NULL,
+    inscestc VARCHAR not null
+    nomecj VARCHAR NOT NULL,
+    enderecocj VARCHAR NOT NULL,
+    telefonecj INTEGER,
+    CONSTRAINT pk_clientej PRIMARY KEY (cnpjc),
+);
+
+CREATE TABLE fornecedor
+(
+    cnpjf VARCHAR NOT NULL,
+    inscestf VARCHAR not null
+    nomef VARCHAR NOT NULL,
+    enderecof VARCHAR NOT NULL,
+    telefonef INTEGER,
+    CONSTRAINT pk_fornecedor PRIMARY KEY (cnpjf),
 );
 
 -- DROP TABLE compras;
 
 CREATE TABLE venda
 (
-    id SERIAL,
+    idv SERIAL,
     cpfcli VARCHAR NOT NULL,
-    dtcompra DATE NOT NULL,
-    hrcompra TIME NOT NULL,
-    valor FLOAT NOT NULL,
-    metpag VARCHAR NOT NULL,
-    CONSTRAINT pk_venda PRIMARY KEY (id),
+    dtvenda DATE NOT NULL,
+    hrvenda TIME NOT NULL,  
+    valorv FLOAT NOT NULL,
+    metpagv VARCHAR NOT NULL,
+    CONSTRAINT pk_venda PRIMARY KEY (idv),
 );
+
+CREATE TABLE compra
+(
+    idc SERIAL,
+    cpfforn VARCHAR NOT NULL,
+    dtcompra DATE NOT NULL,
+    hrcompra TIME NOT NULL,  
+    valorc FLOAT NOT NULL,
+    metpagc VARCHAR NOT NULL,
+    CONSTRAINT pk_compra PRIMARY KEY (idc),
+);
+
+CREATE TABLE licitacao
+(
+    idl SERIAL,
+    cnpjcli VARCHAR NOT NULL,
+    dtlic DATE NOT NULL,
+    hrlic TIME NOT NULL,  
+    valorl FLOAT NOT NULL,
+    metpagl VARCHAR NOT NULL,
+    CONSTRAINT pk_licitacao PRIMARY KEY (idl),
+);
+
 
 INSERT INTO admin (email, senha) VALUES ('administrador@gmail.com', 'sysadmin');
 

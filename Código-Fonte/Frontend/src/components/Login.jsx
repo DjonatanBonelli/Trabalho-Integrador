@@ -1,29 +1,66 @@
 import * as React from 'react';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
+import axios from 'axios';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 //import Link from '@mui/material/Link';
 //import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
+import {
+	Alert,
+	Box,
+	Button,
+	Snackbar,
+	Stack,
+	TextField,
+  Typography,
+  Container,
+  Checkbox,
+  FormControlLabel,
+  CssBaseline,
+  Avatar
+} from "@mui/material";
+
 //import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 //const defaultTheme = createTheme();
 
-export default function Login() {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
-  };
+export default function Login(props) {
+  const [email, setEmail] = React.useState("");
+	const [passwd, setPasswd] = React.useState("");
+
+	const [openMessage, setOpenMessage] = React.useState(false);
+	const [messageText, setMessageText] = React.useState("");
+	const [messageSeverity, setMessageSeverity] = React.useState("success");
+
+	async function enviaLogin(event) {
+		event.preventDefault();
+		try {
+			const response = await axios.post("/login", {
+				email: email,
+				password: passwd,
+			});
+			console.log(response);
+			if (response.status >= 200 && response.status < 300) {
+				// Salva o token JWT na sessão
+				localStorage.setItem("token", response.data.token);
+				// seta o estado do login caso tudo deu certo
+				props.onLogin();
+			} else {
+				// falha
+				console.error("Falha na autenticação");
+			}
+		} catch (error) {
+			console.log(error);
+			setOpenMessage(true);
+			setMessageText("Falha ao logar usuário!");
+			setMessageSeverity("error");
+		}
+	}
+
+  function handleCloseMessage(_, reason) {
+		if (reason === "clickaway") {
+			return;
+		}
+		setOpenMessage(false);
+	}
 
   return (
       <Container component="main" maxWidth="xs">
@@ -45,7 +82,7 @@ export default function Login() {
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
-          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+          <Box component="form" onSubmit={enviaLogin} noValidate sx={{ mt: 1 }}>
             <TextField
               margin="normal"
               required

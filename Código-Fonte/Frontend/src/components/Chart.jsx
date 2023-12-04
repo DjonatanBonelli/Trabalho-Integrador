@@ -26,7 +26,7 @@ export default function Chart() {
 
   return (
     <React.Fragment>
-      <Title>Hoje </Title>
+      <Title>Hoje</Title>
       <ResponsiveContainer>
         <LineChart
           data={dependencias}

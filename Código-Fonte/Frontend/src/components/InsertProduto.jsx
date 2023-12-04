@@ -8,8 +8,8 @@ import TableRow from '@mui/material/TableRow';
 import Title from './Title';
 import axios from 'axios';
 
-export default function Checkout(){
-    const [listaVendas, setListaVendas] = React.useState([]);
+export default function InsertProduto(){
+    const [listaProdutos, setListaProdutos] = React.useState([]);
 
     const [nome, setNome] = React.useState("");
     const [valor, setValor] = React.useState("");
@@ -25,16 +25,19 @@ export default function Checkout(){
   async function getData() {
     try {
         const res = await axios.get("http://localhost:3010/produtos-lista");
-        setListaVendas(res.data);
+        setListaProdutos(res.data);
         console.log(res.data);
     } catch (error) {
-        setListaVendas([]); 
+        setListaProdutos([]); 
     }
   }
 
+  function preventDefault(event) {
+    event.preventDefault();
+  }
   function clearForm() {
       setNome("");
-      setEmail("");
+      setValor("");
   }
 
   function handleCancelClick() {
@@ -88,17 +91,15 @@ export default function Checkout(){
             <TableRow>
               <TableCell>ID</TableCell>
               <TableCell>Nome</TableCell>
-              <TableCell align="right">Valor</TableCell>
+              <TableCell>Valor</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {listaProdutos.map((row) => (
-              <TableRow key={row.dtcompra}>
+              <TableRow key={row.id}>
+                <TableCell>{row.id}</TableCell>
                 <TableCell>{row.nome}</TableCell>
-                <TableCell>{row.dtcompra}</TableCell>
-                <TableCell>{row.hrcompra}</TableCell>
-                <TableCell>{row.metpag}</TableCell>
-                <TableCell align="right">{`R$${row.valor}`}</TableCell>
+                <TableCell>{`R${row.valor}`}</TableCell> 
               </TableRow>
             ))}
           </TableBody>

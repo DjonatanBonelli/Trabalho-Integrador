@@ -25,7 +25,7 @@ export default function Orders() {
         setListaVendas(res.data);
         console.log(res.data);
     } catch (error) {
-        setListaVendas([]); 
+        setListaVendas([]);
     }
   }
 

@@ -6,6 +6,7 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import PeopleIcon from '@mui/icons-material/People';
 import BarChartIcon from '@mui/icons-material/BarChart';
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 
 export const mainListItems = (
   <React.Fragment>
@@ -23,7 +24,7 @@ export const mainListItems = (
     </ListItemButton>
     <ListItemButton>
       <ListItemIcon>
-        <DashboardIcon />
+        <AddShoppingCartIcon />
       </ListItemIcon>
       <ListItemText primary="Produtos" />
     </ListItemButton>
