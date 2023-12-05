@@ -9,14 +9,15 @@ import TableRow from '@mui/material/TableRow';
 import Title from './Title';
 import axios from 'axios';
 
-export default function InsertProduto(){
-    const [listaClientes, setListaClientes] = React.useState([]);
+export default function InsertVenda(){
+    const [listaVendas, setListaVendas] = React.useState([]);
 
     const [nome, setNome] = React.useState("");
-    const [cpf, setCPF] = React.useState("");
-    const [endereco, setEndereco] = React.useState("");
-    const [telefone, setTelefone] = React.useState("");
-  
+    const [valor, setValor] = React.useState("");
+    const [data, setData] = React.useState("");
+    const [hora, setHora] = React.useState("");
+    const [metpag, setMetPag] = React.useState("");
+
     const [openMessage, setOpenMessage] = React.useState(false);
     const [messageText, setMessageText] = React.useState("");
     const [messageSeverity, setMessageSeverity] = React.useState("success");
@@ -27,10 +28,10 @@ export default function InsertProduto(){
 
   async function getData() {
     try {
-        const res = await axios.get("http://localhost:3010/lista-clientes");
-        setListaClientes(res.data);
+        const res = await axios.get("http://localhost:3010/lista-vendas");
+        setListaVendas(res.data);
     } catch (error) {
-        setListaClientes([]); 
+        setListaVendas([]); 
     }
   }
 
@@ -39,28 +40,29 @@ export default function InsertProduto(){
   }
   function clearForm() {
       setNome("");
-      setCPF("");
-      setEndereco("");
-      setTelefone("");
+      setData("");
+      setHora("");
+      setValor("");
+      setMetPag("");
   }
 
   function handleCancelClick() {
-      if (nome !== "" || cpf !== "" || endereco !== "") {
-          setMessageText("Cadastro de cliente cancelado!");
+      if (valor !== "" || data !== "" || hora !== "" || metpag !== "") {
+          setMessageText("Cadastro de venda cancelado!");
           setMessageSeverity("warning");
           setOpenMessage(true);
       }
       clearForm();
   }
 
-  async function handleDeleteClick(clienteCPF){
+  async function handleDeleteClick(data, hora){
     try{
-      await axios.delete(`http://localhost:3010/deletar-clientes?cpf=${clienteCPF}`);
-      setMessageText("Cliente excluído com sucesso!");
+      await axios.delete(`http://localhost:3010/deletar-venda?dt=${data}&hr=${hora}`);
+      setMessageText("Venda excluída com sucesso!");
       setMessageSeverity("success");
     } catch (error) {
       console.log(error);
-      setMessageText("Falha na exclusão do cliente!");
+      setMessageText("Falha na exclusão da venda!");
       setMessageSeverity("error");
     } finally {
       setOpenMessage(true);
@@ -69,36 +71,37 @@ export default function InsertProduto(){
 }
 
   function recover(row){
-    setNome(row.nomecf); 
-    setCPF(row.cpf);
-    setEndereco(row.enderecocf);
-    setTelefone(row.telefonecf);
-    handleDeleteClick(row.cpf);
+    setNome(row.nomecli); 
+    setValor(row.valor);
+    setData(row.data);
+    setHora(row.hora);
+    setMetPag(row.metpag);
+    handleDeleteClick(row.data, row.hora);
   }
 
   async function handleSubmit() {
-      if (nome !== "" && cpf.length === 11 && endereco !== "") {
+      if (valor !== "" && data !== "" && hora !== "" && metpag !== "") {
           try {
               await axios.post("http://localhost:3010/inserir-clientes", {
                   nome: nome,
-                  cpf: cpf,
-                  telefone: telefone,
-                  endereco: endereco
+                  data: data,
+                  hora: hora,
+                  metpag: metpag
               });
               //console.log(`Nome: ${nome} - CPF: ${cpf} - Endereço: ${endereco} - Telefone: ${telefone}`);
-              setMessageText("Cliente cadastrado com sucesso!");
+              setMessageText("Venda cadastrado com sucesso!");
               setMessageSeverity("success");
               clearForm(); // limpa o formulário apenas se cadastrado com sucesso
           } catch (error) {
               console.log(error);
-              setMessageText("Falha no cadastro do cliente!");
+              setMessageText("Falha no cadastro do Venda!");
               setMessageSeverity("error");
           } finally {
               setOpenMessage(true);
               await getData();
           }
       } else {
-          setMessageText("Dados de cliente inválidos!");
+          setMessageText("Dados de venda inválidos!");
           setMessageSeverity("warning");
           setOpenMessage(true);
       }
@@ -115,11 +118,10 @@ export default function InsertProduto(){
     return(
         <React.Fragment>
         <Box>
-        <Title>Clientes</Title>
+        <Title>Vender</Title>
               <Stack spacing={2}>
                 <Stack spacing={2}>
                     <TextField
-                        required
                         id="nome-input"
                         label="Nome"
                         size="small"
@@ -128,27 +130,36 @@ export default function InsertProduto(){
                     />
                     <TextField
                         required
-                        id="cpf-input"
-                        label="CPF"
+                        id="data-input"
+                        label="Data"
                         size="small"
-                        onChange={(e) => setCPF(e.target.value)}
-                        value={cpf}
+                        onChange={(e) => setData(e.target.value)}
+                        value={data}
                         inputProps={{ maxLength: 11 }}
                     />
                     <TextField
                         required
-                        id="endereco-input"
-                        label="Endereco"
+                        id="hora-input"
+                        label="Hora"
                         size="small"
-                        onChange={(e) => setEndereco(e.target.value)}
-                        value={endereco}
+                        onChange={(e) => setHora(e.target.value)}
+                        value={hora}
                     />
                     <TextField
-                        id="telefone-input"
-                        label="Telefone"
+                        required
+                        id="valor-input"
+                        label="Valor"
                         size="small"
-                        onChange={(e) => setTelefone(e.target.value)}
-                        value={telefone}
+                        onChange={(e) => setValor(e.target.value)}
+                        value={valor}
+                    />
+                    <TextField
+                        required
+                        id="metpag-input"
+                        label="Método de Pagamento"
+                        size="small"
+                        onChange={(e) => setMetPag(e.target.value)}
+                        value={metpag}
                     />
                 </Stack>
                 <Stack direction="row" spacing={3}>
@@ -180,22 +191,22 @@ export default function InsertProduto(){
           <TableHead>
             <TableRow>
               <TableCell>Nome</TableCell>
-              <TableCell>CPF</TableCell>
-              <TableCell>Endereço</TableCell>
-              <TableCell>Telefone</TableCell>
+              <TableCell>Data</TableCell>
+              <TableCell>Hora</TableCell>
+              <TableCell>Valor</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {listaClientes.map((row) => (
-              <TableRow key={row.nomecf}>
-                <TableCell>{row.nomecf}</TableCell>
-                <TableCell>{row.cpf}</TableCell> 
-                <TableCell>{row.enderecocf}</TableCell> 
-                <TableCell>{row.telefonecf}</TableCell> 
+            {listaVendas.map((row) => (
+              <TableRow key={row.nome}>
+                <TableCell>{row.dtvenda}</TableCell>
+                <TableCell>{row.hrvenda}</TableCell> 
+                <TableCell>{row.valorv}</TableCell> 
+                <TableCell>{row.metpag}</TableCell> 
                 <TableCell align='right' style={{ padding: '0' }}>
                   <Button onClick={() => 
                   recover(row)}>Editar</Button>
-                  <Button onClick={() => handleDeleteClick(row.cpf)}>Excluir</Button>
+                  <Button onClick={() => handleDeleteClick(row.dtvenda, row.hrvenda)}>Excluir</Button>
                   </TableCell> 
               </TableRow>
             ))}

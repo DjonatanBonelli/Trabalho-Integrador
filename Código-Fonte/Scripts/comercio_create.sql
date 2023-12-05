@@ -12,9 +12,10 @@ CREATE TABLE admin
 CREATE TABLE produto
 (
     idp SERIAL,
+    ncm INTEGER NOT NULL,
     nomep VARCHAR NOT NULL,
     valorp FLOAT NOT NULL,
-    UNIQUE(nomep),
+    UNIQUE(nomep, ncm),
     CONSTRAINT pk_produto PRIMARY KEY (idp),
 );
 
@@ -32,20 +33,22 @@ CREATE TABLE clientef
 CREATE TABLE clientej
 (
     cnpjc VARCHAR NOT NULL,
-    inscestc VARCHAR not null
+    inesc VARCHAR not null
     nomecj VARCHAR NOT NULL,
     enderecocj VARCHAR NOT NULL,
     telefonecj INTEGER,
+    UNIQUE (inesc)
     CONSTRAINT pk_clientej PRIMARY KEY (cnpjc),
 );
 
 CREATE TABLE fornecedor
 (
     cnpjf VARCHAR NOT NULL,
-    inscestf VARCHAR not null
+    inesf VARCHAR not null
     nomef VARCHAR NOT NULL,
     enderecof VARCHAR NOT NULL,
     telefonef INTEGER,
+    UNIQUE (inesc)
     CONSTRAINT pk_fornecedor PRIMARY KEY (cnpjf),
 );
 
@@ -53,35 +56,32 @@ CREATE TABLE fornecedor
 
 CREATE TABLE venda
 (
-    idv SERIAL,
-    cpfcli VARCHAR NOT NULL,
+    nomecli VARCHAR NULL,
     dtvenda DATE NOT NULL,
     hrvenda TIME NOT NULL,  
     valorv FLOAT NOT NULL,
     metpagv VARCHAR NOT NULL,
-    CONSTRAINT pk_venda PRIMARY KEY (idv),
+    CONSTRAINT pk_venda PRIMARY KEY (nomecli, dtvenda, hrvenda),
 );
 
 CREATE TABLE compra
 (
-    idc SERIAL,
-    cpfforn VARCHAR NOT NULL,
+    cnpjf VARCHAR NOT NULL,
     dtcompra DATE NOT NULL,
     hrcompra TIME NOT NULL,  
     valorc FLOAT NOT NULL,
     metpagc VARCHAR NOT NULL,
-    CONSTRAINT pk_compra PRIMARY KEY (idc),
+    CONSTRAINT pk_compra PRIMARY KEY (cnpjf, dtcompra, hrcompra),
 );
 
 CREATE TABLE licitacao
 (
-    idl SERIAL,
     cnpjcli VARCHAR NOT NULL,
     dtlic DATE NOT NULL,
     hrlic TIME NOT NULL,  
     valorl FLOAT NOT NULL,
     metpagl VARCHAR NOT NULL,
-    CONSTRAINT pk_licitacao PRIMARY KEY (idl),
+    CONSTRAINT pk_licitacao PRIMARY KEY (cnpjcli, dtlic, hrlic),
 );
 
 

@@ -48,7 +48,7 @@ export default function Login(props) {
 				console.error("Falha na autenticação");
 			}
 		} catch (error) {
-			console.log(error);
+			console.log(error.response, error.message, error.request);
 			setOpenMessage(true);
 			setMessageText("Falha ao logar usuário!");
 			setMessageSeverity("error");

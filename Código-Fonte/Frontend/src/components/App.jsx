@@ -1,6 +1,7 @@
 import React from "react";
 import axios from "axios";
 import Login from "./Login.jsx";
+import InsertVenda from "./InsertVenda.jsx";
 import Dashboard from "./Dashboard.jsx";
 import InsertProduto from "./InsertProduto.jsx";
 import InsertCliente from "./InsertCliente.jsx";
@@ -49,6 +50,7 @@ axios.defaults.headers.common["Content-Type"] =
 function App(){
 	const drawerWidth = 240;
     const [isLoggedIn, setIsLoggedIn] = React.useState(false);
+	const [title, setTitle] = React.useState("Dashboard");
     const AppBar = styled(MuiAppBar, {
     shouldForwardProp: (prop) => prop !== 'open',
     })(({ theme, open }) => ({
@@ -151,7 +153,7 @@ function App(){
                 noWrap
                 sx={{ flexGrow: 1 }}
                 >
-                Visão Geral
+                {title}
                 </Typography>
                 <IconButton color="inherit">
                 <Badge badgeContent={0} color="secondary">
@@ -170,16 +172,18 @@ function App(){
                 }}
             >
                 <IconButton onClick={toggleDrawer}>
-                <ChevronLeftIcon onClick = {() => {navigate("/inserir-cliente")}}/>
+                <ChevronLeftIcon/>
                 </IconButton>
             </Toolbar>
             <Divider />
             <List component="nav">
 			<React.Fragment>
 				<ListItemButton
+
 					variant="link"
 					onClick={() => {
-						navigate("/dashboard");
+						setTitle("Dashboard");
+						navigate("/");
 					}}>
 				<ListItemIcon>
 					<DashboardIcon />
@@ -189,6 +193,7 @@ function App(){
 				<ListItemButton
 					variant="link"
 					onClick={() => {
+						setTitle("Vender");
 						navigate("/venda");
 					}}>
 				<ListItemIcon>
@@ -199,6 +204,7 @@ function App(){
 				<ListItemButton
 					variant="link"
 					onClick={() => {
+						setTitle("Produtos");
 						navigate("/produtos");
 					}}>
 				<ListItemIcon>
@@ -209,6 +215,7 @@ function App(){
 				<ListItemButton 		
 					variant="link"
 					onClick={() => {
+						setTitle("Clientes");
 						navigate("/clientes");
 					}}>
 				<ListItemIcon>
@@ -219,6 +226,7 @@ function App(){
 				<ListItemButton
 					variant="link"
 					onClick={() => {
+						setTitle("Relatórios");
 						navigate("/relatorios");
 					}}>
 				<ListItemIcon>
@@ -240,7 +248,7 @@ function App(){
 									element={<Login onLogin={handleLogin} />}
 								/>
 								<Route
-									path="/dashboard"
+									path="/"
 									element={
 										<Dashboard
 										/>
@@ -252,13 +260,24 @@ function App(){
 										<InsertCliente/>
 									}
 								/>
+                                <Route
+									path="produtos"
+									element={
+										<InsertProduto/>
+									}
+								/>
+                                <Route
+									path="venda"
+									element={
+										<InsertVenda/>
+									}
+								/>
 
 							</Routes>
 						</Grid>
 			</Grid>
 	 </ThemeProvider>
 	 
-
 	</>
     );
 }

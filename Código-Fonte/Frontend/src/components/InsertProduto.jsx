@@ -1,6 +1,8 @@
 import * as React from 'react';
 import Link from '@mui/material/Link';
 import Table from '@mui/material/Table';
+import { TextField, Button, Snackbar, Alert } from '@mui/material';
+import Stack from '@mui/material/Stack';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
@@ -24,7 +26,7 @@ export default function InsertProduto(){
 
   async function getData() {
     try {
-        const res = await axios.get("http://localhost:3010/produtos-lista");
+        const res = await axios.get("http://localhost:3010/lista-produto");
         setListaProdutos(res.data);
         console.log(res.data);
     } catch (error) {
@@ -40,6 +42,27 @@ export default function InsertProduto(){
       setValor("");
   }
 
+  async function handleDeleteClick(produtoID){
+    try{
+      await axios.delete(`http://localhost:3010/deletar-produto?id=${produtoID}`);
+      setMessageText("Produto excluído com sucesso!");
+      setMessageSeverity("success");
+    } catch (error) {
+      console.log(error);
+      setMessageText("Falha na exclusão do produto!");
+      setMessageSeverity("error");
+    } finally {
+      setOpenMessage(true);
+      await getData();
+    }
+}
+
+  function recover(row){
+    setNome(row.nome);
+    setValor(row.valor); 
+    handleDeleteClick(row.id);
+  }
+
   function handleCancelClick() {
       if (nome !== "" || valor !== "") {
           setMessageText("Cadastro de produto cancelado!");
@@ -52,7 +75,7 @@ export default function InsertProduto(){
   async function handleSubmit() {
       if (nome !== "" && valor !== "") {
           try {
-              await axios.post("/cliente", {
+              await axios.post("http://localhost:3010/inserir-produto", {
                   nome: nome,
                   valor: valor,
               });
@@ -82,10 +105,53 @@ export default function InsertProduto(){
       setOpenMessage(false);
   }
 
-
     return(
         <React.Fragment>
         <Title>Produtos</Title>
+        <Stack spacing={2}>
+                <Stack spacing={2}>
+                    <TextField
+                        required
+                        id="nome-input"
+                        label="Nome"
+                        size="small"
+                        onChange={(e) => setNome(e.target.value)}
+                        value={nome}
+                    />
+                    <TextField
+                        required
+                        id="valor-input"
+                        label="Valor"
+                        size="small"
+                        onChange={(e) => setValor(e.target.value)}
+                        value={valor}
+                    />
+        </Stack>
+        <Stack direction="row" spacing={3}>
+                    <Button
+                        variant="contained"
+                        style={{
+                          maxWidth: "100px",
+                          minWidth: "100px",
+                        }}
+                        onClick={handleSubmit}
+                        type="submit"
+                        color="primary"
+                        >
+                        Enviar
+                    </Button>
+                    <Button
+                        variant="outlined"
+                        style={{
+                          maxWidth: "100px",
+                          minWidth: "100px",
+                        }}
+                        onClick={handleCancelClick}
+                        color="error"
+                        >
+                        Cancelar
+                    </Button>
+                </Stack>
         <Table size="small">
           <TableHead>
             <TableRow>
@@ -99,14 +165,32 @@ export default function InsertProduto(){
               <TableRow key={row.id}>
                 <TableCell>{row.id}</TableCell>
                 <TableCell>{row.nome}</TableCell>
-                <TableCell>{`R${row.valor}`}</TableCell> 
+                <TableCell>{`R$ ${row.valor}`}</TableCell> 
+                <TableCell align='right' style={{ padding: '0' }}>
+                  <Button onClick={() => 
+                  recover(row)}>Editar</Button>
+                  <Button onClick={() => handleDeleteClick(row.id)}>Excluir</Button>
+                  </TableCell> 
               </TableRow>
             ))}
           </TableBody>
         </Table>
+        </Stack>
         <Link color="primary" href="#" onClick={preventDefault} sx={{ mt: 3 }}>
           Ver mais
         </Link>
+        <Snackbar
+            open={openMessage}
+            autoHideDuration={6000}
+            onClose={handleCloseMessage}
+        >
+            <Alert
+                severity={messageSeverity}
+                onClose={handleCloseMessage}
+            >
+            {messageText}
+            </Alert>
+        </Snackbar>
       </React.Fragment>
     );
 }

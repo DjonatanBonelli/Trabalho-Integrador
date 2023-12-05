@@ -45,7 +45,7 @@ export default function Orders() {
         <TableBody>
           {listaVendas.map((row) => (
             <TableRow key={row.dtcompra}>
-              <TableCell>{row.nome}</TableCell>
+              <TableCell>{row.nomecf}</TableCell>
               <TableCell>{row.dtcompra}</TableCell>
               <TableCell>{row.hrcompra}</TableCell>
               <TableCell>{row.metpag}</TableCell>
