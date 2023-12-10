@@ -33,11 +33,10 @@ export default function Login(props) {
 	async function enviaLogin(event) {
 		event.preventDefault();
 		try {
-			const response = await axios.post("http://localhost:3010/login", {
-				email: email,
-				password: passwd,
-			});
-			console.log(response);
+      const response = await axios.post("http://localhost:3010/login", {
+        email: email,
+        password: passwd,
+      });
 			if (response.status >= 200 && response.status < 300) {
 				// Salva o token JWT na sessão
 				localStorage.setItem("token", response.data.token);
@@ -48,7 +47,7 @@ export default function Login(props) {
 				console.error("Falha na autenticação");
 			}
 		} catch (error) {
-			console.log(error.response, error.message, error.request);
+			console.log(error);
 			setOpenMessage(true);
 			setMessageText("Falha ao logar usuário!");
 			setMessageSeverity("error");

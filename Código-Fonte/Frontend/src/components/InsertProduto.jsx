@@ -107,6 +107,7 @@ export default function InsertProduto(){
 
     return(
         <React.Fragment>
+<div style={{position: 'absolute', top: '40%', left: '50%', transform: 'translate(-50%, -50%)', width: '75%', marginLeft: '10%'}}>
         <Title>Produtos</Title>
         <Stack spacing={2}>
                 <Stack spacing={2}>
@@ -191,6 +192,7 @@ export default function InsertProduto(){
             {messageText}
             </Alert>
         </Snackbar>
+        </div>
       </React.Fragment>
     );
 }

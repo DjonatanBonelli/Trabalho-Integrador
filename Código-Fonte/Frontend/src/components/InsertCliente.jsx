@@ -16,7 +16,8 @@ export default function InsertProduto(){
     const [cpf, setCPF] = React.useState("");
     const [endereco, setEndereco] = React.useState("");
     const [telefone, setTelefone] = React.useState("");
-  
+    const [valor, setValor] = React.useState('');
+
     const [openMessage, setOpenMessage] = React.useState(false);
     const [messageText, setMessageText] = React.useState("");
     const [messageSeverity, setMessageSeverity] = React.useState("success");
@@ -111,9 +112,18 @@ export default function InsertProduto(){
       setOpenMessage(false);
   }
 
+  const handleInputChange = (event) => {
+    const novoValor = event.target.value;
+    // Remove todos os pontos existentes e adiciona pontos a cada dois caracteres
+    const valorFormatado = novoValor.replace(/\./g, '').replace(/(.{2})/g, '$1.');
+    setValor(valorFormatado);
+
+  };
+  
 
     return(
         <React.Fragment>
+        <div style={{position: 'absolute', top: '45%', left: '50%', transform: 'translate(-50%, -50%)', width: '75%', marginLeft: '10%'}}>
         <Box>
         <Title>Clientes</Title>
               <Stack spacing={2}>
@@ -220,6 +230,7 @@ export default function InsertProduto(){
             </Alert>
         </Snackbar>
         </Box>
+        </div>
       </React.Fragment>
     );
 }

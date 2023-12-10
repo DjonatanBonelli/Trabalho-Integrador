@@ -12,10 +12,7 @@ import axios from 'axios';
 export default function InsertVenda(){
     const [listaVendas, setListaVendas] = React.useState([]);
 
-    const [nome, setNome] = React.useState("");
     const [valor, setValor] = React.useState("");
-    const [data, setData] = React.useState("");
-    const [hora, setHora] = React.useState("");
     const [metpag, setMetPag] = React.useState("");
 
     const [openMessage, setOpenMessage] = React.useState(false);
@@ -28,7 +25,7 @@ export default function InsertVenda(){
 
   async function getData() {
     try {
-        const res = await axios.get("http://localhost:3010/lista-vendas");
+        const res = await axios.get("http://localhost:3010/lista-vendas-geral");
         setListaVendas(res.data);
     } catch (error) {
         setListaVendas([]); 
@@ -39,15 +36,12 @@ export default function InsertVenda(){
     event.preventDefault();
   }
   function clearForm() {
-      setNome("");
-      setData("");
-      setHora("");
       setValor("");
       setMetPag("");
   }
 
   function handleCancelClick() {
-      if (valor !== "" || data !== "" || hora !== "" || metpag !== "") {
+      if (valor !== "" || metpag !== "") {
           setMessageText("Cadastro de venda cancelado!");
           setMessageSeverity("warning");
           setOpenMessage(true);
@@ -71,30 +65,25 @@ export default function InsertVenda(){
 }
 
   function recover(row){
-    setNome(row.nomecli); 
     setValor(row.valor);
-    setData(row.data);
-    setHora(row.hora);
     setMetPag(row.metpag);
     handleDeleteClick(row.data, row.hora);
   }
 
   async function handleSubmit() {
-      if (valor !== "" && data !== "" && hora !== "" && metpag !== "") {
+      if (valor !== "" && metpag !== "") {
           try {
-              await axios.post("http://localhost:3010/inserir-clientes", {
-                  nome: nome,
-                  data: data,
-                  hora: hora,
+              await axios.post("http://localhost:3010/inserir-venda", {
+                  valor: valor,
                   metpag: metpag
               });
-              //console.log(`Nome: ${nome} - CPF: ${cpf} - Endereço: ${endereco} - Telefone: ${telefone}`);
-              setMessageText("Venda cadastrado com sucesso!");
+
+              setMessageText("Venda cadastrada com sucesso!");
               setMessageSeverity("success");
               clearForm(); // limpa o formulário apenas se cadastrado com sucesso
           } catch (error) {
               console.log(error);
-              setMessageText("Falha no cadastro do Venda!");
+              setMessageText("Falha no cadastro da venda!");
               setMessageSeverity("error");
           } finally {
               setOpenMessage(true);
@@ -114,41 +103,17 @@ export default function InsertVenda(){
       setOpenMessage(false);
   }
 
-
     return(
         <React.Fragment>
+        <div style={{position: 'absolute', top: '40%', left: '50%', transform: 'translate(-50%, -50%)', width: '75%', marginLeft: '10%'}}>
         <Box>
         <Title>Vender</Title>
               <Stack spacing={2}>
                 <Stack spacing={2}>
                     <TextField
-                        id="nome-input"
-                        label="Nome"
-                        size="small"
-                        onChange={(e) => setNome(e.target.value)}
-                        value={nome}
-                    />
-                    <TextField
-                        required
-                        id="data-input"
-                        label="Data"
-                        size="small"
-                        onChange={(e) => setData(e.target.value)}
-                        value={data}
-                        inputProps={{ maxLength: 11 }}
-                    />
-                    <TextField
-                        required
-                        id="hora-input"
-                        label="Hora"
-                        size="small"
-                        onChange={(e) => setHora(e.target.value)}
-                        value={hora}
-                    />
-                    <TextField
                         required
                         id="valor-input"
-                        label="Valor"
+                        label="Valor da Venda"
                         size="small"
                         onChange={(e) => setValor(e.target.value)}
                         value={valor}
@@ -190,15 +155,17 @@ export default function InsertVenda(){
         <Table size="small">
           <TableHead>
             <TableRow>
-              <TableCell>Nome</TableCell>
+              <TableCell>ID</TableCell>
               <TableCell>Data</TableCell>
               <TableCell>Hora</TableCell>
               <TableCell>Valor</TableCell>
+              <TableCell>Método de Pagamento</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {listaVendas.map((row) => (
-              <TableRow key={row.nome}>
+              <TableRow key={row.idv}>
+                <TableCell>{row.idv}</TableCell>
                 <TableCell>{row.dtvenda}</TableCell>
                 <TableCell>{row.hrvenda}</TableCell> 
                 <TableCell>{row.valorv}</TableCell> 
@@ -231,6 +198,7 @@ export default function InsertVenda(){
             </Alert>
         </Snackbar>
         </Box>
+        </div>
       </React.Fragment>
     );
 }

@@ -35,6 +35,7 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import PeopleIcon from '@mui/icons-material/People';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
+import LogoutIcon from '@mui/icons-material/Logout';
 
 import {
 	Button,
@@ -122,9 +123,9 @@ function App(){
 		setIsLoggedIn(false);
 	};
 
-	{/*isLoggedIn ? (	 ) : (<Login onLogin={handleLogin} />)*/}
     return (
-		<>
+		<Box>
+		{isLoggedIn ? (
 		<ThemeProvider theme={defaultTheme}>
         <Box sx={{ display: 'flex' }}>
             <CssBaseline />
@@ -155,9 +156,10 @@ function App(){
                 >
                 {title}
                 </Typography>
-                <IconButton color="inherit">
+                <IconButton color="inherit"
+					onClick={handleLogout}>
                 <Badge badgeContent={0} color="secondary">
-                    <NotificationsIcon />
+                    <LogoutIcon/>
                 </Badge>
                 </IconButton>
             </Toolbar>
@@ -272,13 +274,19 @@ function App(){
 										<InsertVenda/>
 									}
 								/>
+								<Route
+									path="login"
+									element={
+										<Login onLogin={handleLogin}/>
+									}
+								/>
 
 							</Routes>
 						</Grid>
 			</Grid>
 	 </ThemeProvider>
-	 
-	</>
+	 ) : (<Login onLogin={handleLogin} />)} 
+	</Box>
     );
 }
 

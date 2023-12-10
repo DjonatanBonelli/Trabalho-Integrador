@@ -21,19 +21,7 @@ import Chart from './Chart';
 import Deposits from './Deposits';
 import Orders from './Orders';
 
-function Copyright(props) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
-// TODO remove, this demo shouldn't need to reset the theme.
+
 const defaultTheme = createTheme();
 
 export default function Dashboard() {
@@ -44,6 +32,7 @@ export default function Dashboard() {
 
   return (
     <ThemeProvider theme={defaultTheme}>
+      <div style={{position: 'absolute', top: '45%', left: '50%', transform: 'translate(-50%, -50%)', width: '75%', marginLeft: '10%'}}>
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
           <Container maxWidth="lg" sx={{ mt: 2, mb: 4 }}>
@@ -81,9 +70,9 @@ export default function Dashboard() {
                 </Paper>
               </Grid>
             </Grid>
-            <Copyright sx={{ pt: 4 }} />
           </Container>
         </Box>
+        </div>
     </ThemeProvider>
   );
 }
