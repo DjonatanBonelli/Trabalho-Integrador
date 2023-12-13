@@ -26,7 +26,9 @@ Técnologias:
    - PostgresSQL
      
 - Tecnologias de programação:
-   - Linguagem JavaScript ;
+   - Linguagem JavaScript;
    - Componentes React (JSX) utilizando MaterialUI;
    - Servidor Express;
+   - Requisições Axios;
    - Login com JWT e token armazenado em navegador;
+   - Autenticação com Passport;
