@@ -15,7 +15,12 @@ export default function Chart() {
 
   async function getData() {
     try {
-        const res = await axios.get("http://localhost:3010/vendas-horas");
+        const token = localStorage.getItem("token"); 
+        const res = await axios.get("http://localhost:3010/vendas-horas", {
+          headers: {
+            Authorization: `bearer ${token}`,
+          },});
+
         setDependencias(res.data);
     } catch (error) {
         setDependencias([]); 

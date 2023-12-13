@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Stack, TextField, Button, Typography, Snackbar, Alert, Box} from '@mui/material';
+import {Stack, Select, MenuItem, TextField, Button, Typography, Snackbar, Alert, Box} from '@mui/material';
 import Link from '@mui/material/Link';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -8,13 +8,13 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Title from './Title';
 import axios from 'axios';
+import { Label } from 'recharts';
 
 export default function InsertVenda(){
     const [listaVendas, setListaVendas] = React.useState([]);
 
     const [valor, setValor] = React.useState("");
-    const [metpag, setMetPag] = React.useState("");
-
+    const [metpag, setMetPag] = React.useState("Dinheiro");
     const [openMessage, setOpenMessage] = React.useState(false);
     const [messageText, setMessageText] = React.useState("");
     const [messageSeverity, setMessageSeverity] = React.useState("success");
@@ -25,7 +25,11 @@ export default function InsertVenda(){
 
   async function getData() {
     try {
-        const res = await axios.get("http://localhost:3010/lista-vendas-geral");
+        const token = localStorage.getItem("token");
+        const res = await axios.get("http://localhost:3010/lista-vendas-geral", {
+          headers: {
+            Authorization: `bearer ${token}`,
+          },});
         setListaVendas(res.data);
     } catch (error) {
         setListaVendas([]); 
@@ -49,9 +53,14 @@ export default function InsertVenda(){
       clearForm();
   }
 
-  async function handleDeleteClick(data, hora){
+  async function handleDeleteClick(idv){
     try{
-      await axios.delete(`http://localhost:3010/deletar-venda?dt=${data}&hr=${hora}`);
+      const token = localStorage.getItem("token");
+      await axios.delete(`http://localhost:3010/deletar-venda?idv=${idv}`, {
+				headers: {
+					Authorization: `bearer ${token}`,
+				}
+      },);
       setMessageText("Venda excluída com sucesso!");
       setMessageSeverity("success");
     } catch (error) {
@@ -67,16 +76,21 @@ export default function InsertVenda(){
   function recover(row){
     setValor(row.valor);
     setMetPag(row.metpag);
-    handleDeleteClick(row.data, row.hora);
+    handleDeleteClick(row.idv);
   }
 
   async function handleSubmit() {
       if (valor !== "" && metpag !== "") {
           try {
+              const token = localStorage.getItem("token");
               await axios.post("http://localhost:3010/inserir-venda", {
                   valor: valor,
-                  metpag: metpag
-              });
+                  metpag: metpag,
+                  },{
+                  headers: {
+                    Authorization: `bearer ${token}`,
+                  }},
+              );
 
               setMessageText("Venda cadastrada com sucesso!");
               setMessageSeverity("success");
@@ -103,6 +117,27 @@ export default function InsertVenda(){
       setOpenMessage(false);
   }
 
+  const metPag = [
+    {
+      value: 'Dinheiro',
+      label: 'Dinheiro',
+    },
+    {
+      value: 'Crédito',
+      label: 'Crédito',
+    },
+    {
+      value: 'Débito',
+      label: 'Débito',
+    },
+    {
+      value: 'Cheque',
+      label: 'Cheque',
+    }]
+    const handleChange = (event) => {
+      setMetPag(event.target.value);
+};
+
     return(
         <React.Fragment>
         <div style={{position: 'absolute', top: '40%', left: '50%', transform: 'translate(-50%, -50%)', width: '75%', marginLeft: '10%'}}>
@@ -118,14 +153,22 @@ export default function InsertVenda(){
                         onChange={(e) => setValor(e.target.value)}
                         value={valor}
                     />
-                    <TextField
-                        required
-                        id="metpag-input"
-                        label="Método de Pagamento"
-                        size="small"
-                        onChange={(e) => setMetPag(e.target.value)}
-                        value={metpag}
-                    />
+                    <Box>
+                  <label>Método de Pagamento: 
+                  </label>
+                  <Select
+                    style={{width: '20%', height: '35px', marginLeft: '10px'}}
+                    value={metpag}
+                    onChange={handleChange}
+                    >  
+                    {metPag.map((option) => (
+                      <MenuItem key={option.value} value={option.value}>
+                          {option.label}
+                        </MenuItem>
+                      ))}
+                  </Select>
+                      </Box>
+                      
                 </Stack>
                 <Stack direction="row" spacing={3}>
                     <Button
@@ -173,7 +216,7 @@ export default function InsertVenda(){
                 <TableCell align='right' style={{ padding: '0' }}>
                   <Button onClick={() => 
                   recover(row)}>Editar</Button>
-                  <Button onClick={() => handleDeleteClick(row.dtvenda, row.hrvenda)}>Excluir</Button>
+                  <Button onClick={() => handleDeleteClick(row.idv)}>Excluir</Button>
                   </TableCell> 
               </TableRow>
             ))}

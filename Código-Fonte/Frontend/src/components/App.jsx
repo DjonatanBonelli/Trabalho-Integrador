@@ -1,13 +1,17 @@
 import React from "react";
 import axios from "axios";
 import Login from "./Login.jsx";
+import InsertFornecedor from "./InsertFornecedor.jsx";
 import InsertVenda from "./InsertVenda.jsx";
+import Relatorios from "./Relatorios.jsx"
 import Dashboard from "./Dashboard.jsx";
+import NotFound from './NotFound';
 import InsertProduto from "./InsertProduto.jsx";
 import InsertCliente from "./InsertCliente.jsx";
 import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import MuiDrawer from '@mui/material/Drawer';
+import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import Box from '@mui/material/Box';
 import MuiAppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
@@ -228,6 +232,17 @@ function App(){
 				<ListItemButton
 					variant="link"
 					onClick={() => {
+						setTitle("Fornecedores");
+						navigate("/fornecedores");
+					}}>
+				<ListItemIcon>
+					<LocalShippingIcon/>
+				</ListItemIcon>
+				<ListItemText primary="Fornecedores" />
+				</ListItemButton>
+				<ListItemButton
+					variant="link"
+					onClick={() => {
 						setTitle("Relatórios");
 						navigate("/relatorios");
 					}}>
@@ -245,10 +260,7 @@ function App(){
 	 <Grid container justifyContent="center" spacing={2}>
 						<Grid >
 							<Routes>
-								<Route
-									path="login"
-									element={<Login onLogin={handleLogin} />}
-								/>
+
 								<Route
 									path="/"
 									element={
@@ -275,12 +287,18 @@ function App(){
 									}
 								/>
 								<Route
-									path="login"
+									path="fornecedores"
 									element={
-										<Login onLogin={handleLogin}/>
+										<InsertFornecedor/>
 									}
 								/>
-
+								<Route
+									path="relatorios"
+									element={
+										<Relatorios/>
+									}
+								/>
+								<Route path="*" element={<NotFound />} />
 							</Routes>
 						</Grid>
 			</Grid>

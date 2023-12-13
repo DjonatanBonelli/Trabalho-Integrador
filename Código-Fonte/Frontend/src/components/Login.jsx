@@ -23,7 +23,7 @@ import {
 //const defaultTheme = createTheme();
 
 export default function Login(props) {
-  const [email, setEmail] = React.useState("");
+	const [username, setUsername] = React.useState("");
 	const [passwd, setPasswd] = React.useState("");
 
 	const [openMessage, setOpenMessage] = React.useState(false);
@@ -34,7 +34,7 @@ export default function Login(props) {
 		event.preventDefault();
 		try {
       const response = await axios.post("http://localhost:3010/login", {
-        email: email,
+        username: username,
         password: passwd,
       });
 			if (response.status >= 200 && response.status < 300) {
@@ -79,21 +79,21 @@ export default function Login(props) {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
+            Login
           </Typography>
           <Box>
             <TextField
               margin="normal"
               required
               fullWidth
-              id="email-input"
-              label="Email"
-              name="email"
-              autoComplete="email"
+              id="username-input"
+              label="Username"
+              name="username"
+              autoComplete="username"
               autoFocus
-              value={email}
+              value={username}
               onChange={(event) => {
-                setEmail(event.target.value);
+                setUsername(event.target.value);
               }}
             />
             <TextField
@@ -120,7 +120,7 @@ export default function Login(props) {
               sx={{ mt: 3, mb: 2 }}
               onClick={enviaLogin}
             >
-              Sign In
+              Login
             </Button>
 				<Snackbar
 					open={openMessage}

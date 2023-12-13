@@ -15,6 +15,7 @@ CREATE TABLE produto
     ncm INTEGER NOT NULL,
     nomep VARCHAR NOT NULL,
     valorp FLOAT NOT NULL,
+    qtde INTEGER,
     UNIQUE(nomep, ncm),
     CONSTRAINT pk_produto PRIMARY KEY (idp),
 );
@@ -33,11 +34,11 @@ CREATE TABLE clientef
 CREATE TABLE clientej
 (
     cnpjc VARCHAR NOT NULL,
-    inesc VARCHAR not null
+    inesc VARCHAR not null,
     nomecj VARCHAR NOT NULL,
     enderecocj VARCHAR NOT NULL,
     telefonecj INTEGER,
-    UNIQUE (inesc)
+    UNIQUE (inesc),
     CONSTRAINT pk_clientej PRIMARY KEY (cnpjc),
 );
 
@@ -48,7 +49,7 @@ CREATE TABLE fornecedor
     nomef VARCHAR NOT NULL,
     enderecof VARCHAR NOT NULL,
     telefonef INTEGER,
-    UNIQUE (inesc)
+    UNIQUE (inesc),
     CONSTRAINT pk_fornecedor PRIMARY KEY (cnpjf),
 );
 
@@ -66,7 +67,7 @@ CREATE TABLE venda
 
 CREATE TABLE compra
 (
-    cnpjf VARCHAR NOT NULL,
+    cnpjf VARCHAR REFERENCES fornecedor(cnpjf),
     dtcompra DATE NOT NULL,
     hrcompra TIME NOT NULL,  
     valorc FLOAT NOT NULL,
@@ -76,7 +77,7 @@ CREATE TABLE compra
 
 CREATE TABLE licitacao
 (
-    cnpjcli VARCHAR NOT NULL,
+    cnpjcli VARCHAR REFERENCES clientej(cnpjc),
     dtlic DATE NOT NULL,
     hrlic TIME NOT NULL,  
     valorl FLOAT NOT NULL,

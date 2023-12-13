@@ -14,7 +14,9 @@ export default function InsertProduto(){
     const [listaProdutos, setListaProdutos] = React.useState([]);
 
     const [nome, setNome] = React.useState("");
+    const [ncm, setNCM] = React.useState("");
     const [valor, setValor] = React.useState("");
+    const [qtde, setQtde] = React.useState("");
   
     const [openMessage, setOpenMessage] = React.useState(false);
     const [messageText, setMessageText] = React.useState("");
@@ -26,7 +28,12 @@ export default function InsertProduto(){
 
   async function getData() {
     try {
-        const res = await axios.get("http://localhost:3010/lista-produto");
+        const token = localStorage.getItem("token");
+        const res = await axios.get("http://localhost:3010/lista-produto", {
+          headers: {
+            Authorization: `bearer ${token}`,
+          },
+        });
         setListaProdutos(res.data);
         console.log(res.data);
     } catch (error) {
@@ -44,7 +51,12 @@ export default function InsertProduto(){
 
   async function handleDeleteClick(produtoID){
     try{
-      await axios.delete(`http://localhost:3010/deletar-produto?id=${produtoID}`);
+      const token = localStorage.getItem("token");
+      await axios.delete(`http://localhost:3010/deletar-produto?id=${produtoID}`, {
+        headers: {
+          Authorization: `bearer ${token}`,
+        }
+      },);
       setMessageText("Produto excluído com sucesso!");
       setMessageSeverity("success");
     } catch (error) {
@@ -73,12 +85,18 @@ export default function InsertProduto(){
   }
 
   async function handleSubmit() {
-      if (nome !== "" && valor !== "") {
+      if (nome !== "" && valor !== "" && ncm.length === 8) {
           try {
+              const token = localStorage.getItem("token");
               await axios.post("http://localhost:3010/inserir-produto", {
                   nome: nome,
                   valor: valor,
-              });
+                  ncm: ncm,
+                  qtde: qtde,
+          },{
+                  headers: {
+                  Authorization: `bearer ${token}`,
+          }});
               console.log(`Nome: ${nome} - Valor: ${valor}`);
               setMessageText("Produto cadastrado com sucesso!");
               setMessageSeverity("success");
@@ -121,11 +139,28 @@ export default function InsertProduto(){
                     />
                     <TextField
                         required
+                        id="ncm-input"
+                        label="NCM"
+                        size="small"
+                        inputProps={{ maxLength: 8 }}
+                        onChange={(e) => setNCM(e.target.value)}
+                        value={ncm}
+                    />
+                    <TextField
+                        required
                         id="valor-input"
                         label="Valor"
                         size="small"
                         onChange={(e) => setValor(e.target.value)}
                         value={valor}
+                    />
+                    <TextField
+                        required
+                        id="qtde-input"
+                        label="Quantidade em estoque"
+                        size="small"
+                        onChange={(e) => setQtde(e.target.value)}
+                        value={qtde}
                     />
         </Stack>
         <Stack direction="row" spacing={3}>
@@ -158,15 +193,19 @@ export default function InsertProduto(){
             <TableRow>
               <TableCell>ID</TableCell>
               <TableCell>Nome</TableCell>
+              <TableCell>NCM</TableCell>
               <TableCell>Valor</TableCell>
+              <TableCell>Quantidade</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {listaProdutos.map((row) => (
-              <TableRow key={row.id}>
-                <TableCell>{row.id}</TableCell>
-                <TableCell>{row.nome}</TableCell>
+              <TableRow key={row.idp}>
+                <TableCell>{row.idp}</TableCell>
+                <TableCell>{row.nomep}</TableCell>
+                <TableCell>{row.ncm}</TableCell>
                 <TableCell>{`R$ ${row.valor}`}</TableCell> 
+                <TableCell>{row.qtde}</TableCell>
                 <TableCell align='right' style={{ padding: '0' }}>
                   <Button onClick={() => 
                   recover(row)}>Editar</Button>
@@ -177,9 +216,6 @@ export default function InsertProduto(){
           </TableBody>
         </Table>
         </Stack>
-        <Link color="primary" href="#" onClick={preventDefault} sx={{ mt: 3 }}>
-          Ver mais
-        </Link>
         <Snackbar
             open={openMessage}
             autoHideDuration={6000}

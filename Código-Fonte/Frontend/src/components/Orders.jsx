@@ -21,7 +21,13 @@ export default function Orders() {
 
   async function getData() {
     try {
-        const res = await axios.get("http://localhost:3010/vendas-lista");
+        const token = localStorage.getItem("token");
+        const res = await axios.get("http://localhost:3010/vendas-lista", {
+          headers: {
+            Authorization: `bearer ${token}`,
+          },
+        });
+        
         setListaVendas(res.data);
         console.log(res.data);
     } catch (error) {
@@ -35,7 +41,7 @@ export default function Orders() {
       <Table size="small">
         <TableHead>
           <TableRow>
-            <TableCell>Nome</TableCell>
+            <TableCell>ID</TableCell>
             <TableCell>Data</TableCell>
             <TableCell>Hora</TableCell>
             <TableCell>Método de Pagamento</TableCell>
@@ -44,19 +50,16 @@ export default function Orders() {
         </TableHead>
         <TableBody>
           {listaVendas.map((row) => (
-            <TableRow key={row.dtcompra}>
-              <TableCell>{row.nomecf}</TableCell>
-              <TableCell>{row.dtcompra}</TableCell>
-              <TableCell>{row.hrcompra}</TableCell>
+            <TableRow key={row.dtvenda}>
+              <TableCell>{row.idv}</TableCell>
+              <TableCell>{row.dtvenda}</TableCell>
+              <TableCell>{row.hrvenda}</TableCell>
               <TableCell>{row.metpag}</TableCell>
-              <TableCell align="right">{`R$${row.valor}`}</TableCell>
+              <TableCell align="right">{`R$${row.valorv}`}</TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
-      <Link color="primary" href="#" onClick={preventDefault} sx={{ mt: 3 }}>
-        Ver mais
-      </Link>
     </React.Fragment>
   );
 }
